@@ -36,4 +36,14 @@ Highcharts.chart("container", {
       data: data.slice(6, 9),
     },
   ],
+  plotOptions: {
+    series: {
+      dataLabels: {
+        enabled: true,
+        formatter: function () {
+          return this.y == maxn ? "max" : "";
+        },
+      },
+    },
+  },
 });
