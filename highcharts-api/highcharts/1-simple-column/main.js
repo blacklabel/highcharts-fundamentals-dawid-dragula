@@ -1,28 +1,9 @@
 const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10));
+const maxn = Math.max(...data);
 
 Highcharts.chart("container", {
   chart: {
     type: "column",
-    events: {
-      load: function () {
-        const maxn = this.yAxis[0].dataMax;
-
-        this.update({
-          yAxis: {
-            max: maxn * 2,
-            tickInterval: (maxn * 2) / 5,
-            plotLines: [
-              {
-                dashStyle: "dash",
-                width: 3,
-                color: "#2a0",
-                value: maxn * 1.5,
-              },
-            ],
-          },
-        });
-      },
-    },
   },
   title: {
     text: "",
@@ -31,11 +12,15 @@ Highcharts.chart("container", {
     categories: ["Jan", "Feb", "Mar"],
   },
   yAxis: {
-    events: {
-      setExtremes: function () {
-        console.log("axis");
+    max: maxn * 2,
+    plotLines: [
+      {
+        dashStyle: "dash",
+        width: 3,
+        color: "#2a0",
+        value: maxn * 1.5,
       },
-    },
+    ],
   },
   series: [
     {
@@ -56,7 +41,7 @@ Highcharts.chart("container", {
       dataLabels: {
         enabled: true,
         formatter: function () {
-          return this.series.yAxis.dataMax == this.y ? "max" : "";
+          return this.y == maxn ? "max" : "";
         },
       },
     },
