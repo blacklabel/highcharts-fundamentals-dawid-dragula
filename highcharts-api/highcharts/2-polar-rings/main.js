@@ -39,8 +39,6 @@ Highcharts.chart("container", {
       redraw: function () {
         const yAxis = this.yAxis[0];
 
-        console.log(this);
-
         this.customCircle.attr({
           cx: this.plotSizeX / 2 + this.plotLeft,
           cy: this.plotSizeY / 2 + this.plotTop,
