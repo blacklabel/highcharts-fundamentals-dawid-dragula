@@ -6,6 +6,46 @@ const data = Array.from(
 Highcharts.chart("container", {
   chart: {
     type: "bar",
+    spacingTop: 50,
+    events: {
+      load: function () {
+        this.customLabels = [];
+        this.customLabels.push(
+          this.renderer
+            .text()
+            .attr({
+              text: "Issue",
+              "font-weight": "bold",
+              x: 10,
+              y: this.spacing[0] - 16,
+            })
+            .add(),
+
+          this.renderer
+            .text()
+            .attr({
+              text: "Record Count",
+              "font-weight": "bold",
+              x: this.plotLeft + 10,
+              y: this.spacing[0] - 16,
+            })
+            .add(),
+
+          this.renderer
+            .text()
+            .attr({
+              text: "Action",
+              "font-weight": "bold",
+              x: this.plotLeft + 200,
+              y: this.spacing[0] - 16,
+            })
+            .add()
+        );
+      },
+      redraw: function () {
+        console.log("redraw");
+      },
+    },
   },
   title: {
     text: "",
@@ -26,6 +66,11 @@ Highcharts.chart("container", {
       },
     },
     gridLineWidth: 0,
+    events: {
+      setExtremes: function () {
+        console.log("set extremes");
+      },
+    },
   },
   legend: {
     enabled: false,
