@@ -1,9 +1,53 @@
 const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10));
-const maxn = Math.max(...data);
 
 Highcharts.chart("container", {
   chart: {
     polar: true,
+    events: {
+      load: function () {
+        const yAxis = this.yAxis[0];
+
+        this.customCircle = this.renderer
+          .circle()
+          .attr({
+            stroke: "blue",
+            "stroke-width": 3,
+            fill: "none",
+          })
+          .add();
+        this.customCircle.value = Math.random();
+
+        yAxis.update({
+          max: yAxis.dataMax * 2,
+          tickInterval: (yAxis.dataMax * 2) / 5,
+          plotLines: [
+            {
+              dashStyle: "dash",
+              width: 3,
+              color: "#2a0",
+              value: yAxis.dataMax * 1.5,
+            },
+          ],
+        });
+
+        yAxis.addPlotLine({
+          width: 3,
+          color: "red",
+          value: yAxis.dataMax * Math.random() * 2,
+        });
+      },
+      redraw: function () {
+        const yAxis = this.yAxis[0];
+
+        console.log(this);
+
+        this.customCircle.attr({
+          cx: this.plotSizeX / 2 + this.plotLeft,
+          cy: this.plotSizeY / 2 + this.plotTop,
+          r: yAxis.toPixels(this.customCircle.value * yAxis.dataMax * 2, true),
+        });
+      },
+    },
   },
   title: {
     text: "",
@@ -12,30 +56,7 @@ Highcharts.chart("container", {
     categories: ["Jan", "Feb", "Mar"],
   },
   yAxis: {
-    max: maxn * 2,
-    plotLines: [
-      {
-        dashStyle: "dash",
-        width: 3,
-        color: "#2a0",
-        value: maxn * 1.5,
-      },
-      {
-        width: 3,
-        color: "blue",
-        value: Math.random() * maxn * 2,
-      },
-      {
-        width: 3,
-        color: "red",
-        value: Math.random() * maxn * 2,
-      },
-      {
-        width: 3,
-        color: "yellow",
-        value: Math.random() * maxn * 2,
-      },
-    ],
+    title: "",
   },
   series: [
     {
@@ -59,7 +80,7 @@ Highcharts.chart("container", {
       dataLabels: {
         enabled: true,
         formatter: function () {
-          return this.y == maxn ? "max" : "";
+          return this.series.yAxis.dataMax == this.y ? "max" : "";
         },
       },
     },
