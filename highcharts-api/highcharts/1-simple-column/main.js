@@ -1,8 +1,8 @@
 const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10));
 
-Highcharts.chart("container", {
+Highcharts.chart('container', {
   chart: {
-    type: "column",
+    type: 'column',
     events: {
       load: function () {
         const maxn = this.yAxis[0].dataMax;
@@ -13,48 +13,48 @@ Highcharts.chart("container", {
             tickInterval: (maxn * 2) / 5,
             plotLines: [
               {
-                dashStyle: "dash",
+                dashStyle: 'dash',
                 width: 3,
-                color: "#2a0",
-                value: maxn * 1.5,
-              },
-            ],
-          },
+                color: '#2a0',
+                value: maxn * 1.5
+              }
+            ]
+          }
         });
-      },
-    },
+      }
+    }
   },
   title: {
-    text: "",
+    text: ''
   },
   xAxis: {
-    categories: ["Jan", "Feb", "Mar"],
+    categories: ['Jan', 'Feb', 'Mar']
   },
   yAxis: {
-    title: "",
+    title: ''
   },
   series: [
     {
-      name: "Tokyo",
+      name: 'Tokyo',
       data: data.slice(0, 3),
     },
     {
-      name: "New York",
+      name: 'New York',
       data: data.slice(3, 6),
     },
     {
-      name: "London",
-      data: data.slice(6, 9),
-    },
+      name: 'London',
+      data: data.slice(6, 9)
+    }
   ],
   plotOptions: {
     series: {
       dataLabels: {
         enabled: true,
         formatter: function () {
-          return this.series.yAxis.dataMax == this.y ? "max" : "";
-        },
-      },
-    },
-  },
+          return this.series.yAxis.dataMax == this.y ? 'max' : '';
+        }
+      }
+    }
+  }
 });
