@@ -35,10 +35,10 @@ Highcharts.chart('container', {
         Object.values(this.xAxis[0].ticks).forEach(tick => {
           if (tick.pos > -1) {
             tick.button = this.renderer.button('How to fix',
-            null, this.xAxis[0].toPixels(tick.pos + 0.45, true),
-            () => alert(`click ${tick.pos}`),
-            { 'stroke': 'blue', 'stroke-width': 3 }
-          ).add();
+              null, this.xAxis[0].toPixels(tick.pos + 0.45, true),
+              () => alert(`click ${tick.pos}`),
+              { 'stroke': 'blue', 'stroke-width': 3 }
+            ).add();
           }
         });
       },
