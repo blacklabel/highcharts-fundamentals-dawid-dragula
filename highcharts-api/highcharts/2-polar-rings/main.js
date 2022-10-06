@@ -1,6 +1,6 @@
 const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10));
 
-Highcharts.chart("container", {
+Highcharts.chart('container', {
   chart: {
     polar: true,
     events: {
@@ -10,9 +10,9 @@ Highcharts.chart("container", {
         this.customCircle = this.renderer
           .circle()
           .attr({
-            stroke: "blue",
-            "stroke-width": 3,
-            fill: "none",
+            stroke: 'blue',
+            'stroke-width': 3,
+            fill: 'none',
           })
           .add();
         this.customCircle.value = Math.random();
@@ -22,9 +22,9 @@ Highcharts.chart("container", {
           tickInterval: (yAxis.dataMax * 2) / 5,
           plotLines: [
             {
-              dashStyle: "dash",
+              dashStyle: 'dash',
               width: 3,
-              color: "#2a0",
+              color: '#2a0',
               value: yAxis.dataMax * 1.5,
             },
           ],
@@ -32,7 +32,7 @@ Highcharts.chart("container", {
 
         yAxis.addPlotLine({
           width: 3,
-          color: "red",
+          color: 'red',
           value: yAxis.dataMax * Math.random() * 2,
         });
       },
@@ -48,28 +48,28 @@ Highcharts.chart("container", {
     },
   },
   title: {
-    text: "",
+    text: '',
   },
   xAxis: {
-    categories: ["Jan", "Feb", "Mar"],
+    categories: ['Jan', 'Feb', 'Mar'],
   },
   yAxis: {
-    title: "",
+    title: '',
   },
   series: [
     {
-      type: "column",
-      name: "Tokyo",
+      type: 'column',
+      name: 'Tokyo',
       data: data.slice(0, 3),
     },
     {
-      type: "column",
-      name: "New York",
+      type: 'column',
+      name: 'New York',
       data: data.slice(3, 6),
     },
     {
-      type: "column",
-      name: "London",
+      type: 'column',
+      name: 'London',
       data: data.slice(6, 9),
     },
   ],
@@ -78,7 +78,7 @@ Highcharts.chart("container", {
       dataLabels: {
         enabled: true,
         formatter: function () {
-          return this.series.yAxis.dataMax == this.y ? "max" : "";
+          return this.series.yAxis.dataMax == this.y ? 'max' : '';
         },
       },
     },
