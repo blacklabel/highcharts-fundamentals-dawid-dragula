@@ -25,15 +25,12 @@ Highcharts.chart('container', {
           yAxis.axisTitle.translate(0, - yAxis.height - 30).attr({ 'font-size': 16 })
           Object.values(this.xAxis[0].ticks).forEach(tick => {
             if (tick.pos > -1) {
-              const height = yAxis.series[0].data[tick.pos].shapeArgs.width,
-                    tickY = tick.label.xy.y - height / 2 - tick.label.getBBox().height / 4,
-                    yAxisX = yAxis.gridGroup.getBBox();
-
+              const yAxisBBox = yAxis.gridGroup.getBBox();
               tick.customBackground[yAxis.userOptions.index].attr({
                 x: yAxisX.x,
-                y: tickY,
+                y: tick.label.xy.y - height / 2 - tick.label.getBBox().height / 4,
                 width: yAxisX.width,
-                height: height
+                height: yAxis.series[0].data[tick.pos].shapeArgs.width
               });
             }
           });
