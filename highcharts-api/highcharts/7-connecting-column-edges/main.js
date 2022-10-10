@@ -20,8 +20,8 @@ Highcharts.chart('container', {
             const nextData = series.data[i + 1];
 
             data.customLine.attr({
-              'd': ['M', data.shapeArgs.x + data.shapeArgs.width + this.plotLeft, data.plotY + this.plotTop,
-                    'L', nextData.shapeArgs.x + this.plotLeft, nextData.plotY + this.plotTop, 'z'],
+              'd': ['M', data.shapeArgs.x + data.shapeArgs.width + this.plotLeft, data.plotY + this.plotTop + 2,
+                    'L', nextData.shapeArgs.x + this.plotLeft, nextData.plotY + this.plotTop + 2, 'z'],
               'stroke': data.color,
             });
 
@@ -39,5 +39,10 @@ Highcharts.chart('container', {
     data: randomArray(10, 16)
   }, {
     data: randomArray(4, 12)
-  }]
+  }],
+  plotOptions: {
+    column: {
+      borderWidth: 0
+    }
+  }
 });
