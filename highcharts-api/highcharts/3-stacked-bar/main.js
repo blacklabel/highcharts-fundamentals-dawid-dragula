@@ -9,33 +9,24 @@ Highcharts.chart('container', {
     spacingTop: 50,
     events: {
       load: function () {
-        this.customLabels = [];
-        this.customLabels.push(
-          this.renderer.text().attr({
-              text: 'Issue',
-              'font-weight': 'bold',
-              'text-anchor': 'end',
-              x: this.plotLeft - 12,
-              y: this.spacing[0] - 16
-            }).add(),
-          this.renderer.text().attr({
-              text: 'Record Count',
-              'font-weight': 'bold',
-              x: this.plotLeft,
-              y: this.spacing[0] - 16
-            }).add(),
-          this.renderer.text().attr({
-              text: 'Action',
-              'font-weight': 'bold',
-              x: this.yAxis[0].toPixels(300),
-              y: this.spacing[0] - 16
-            }).add()
-        );
+        const chart = this,
+              customLabelsData = ['Issue', 'Record Count', 'Action'];
+
+        chart.customLabels = [];
+        customLabelsData.forEach(text => {
+          chart.customLabels.push(chart.renderer.text().attr({
+            text, 'font-weight': 'bold', y: chart.spacing[0] - 16
+          }).add());
+        });
+
+        chart.customLabels[0].attr({ x: chart.plotLeft - 12, 'text-anchor': 'end' });
+        chart.customLabels[1].attr({ x: chart.plotLeft });
+        chart.customLabels[2].attr({ x: chart.yAxis[0].toPixels(300), y: chart.spacing[0] - 16 })
         
-        Object.values(this.xAxis[0].ticks).forEach(tick => {
+        Object.values(chart.xAxis[0].ticks).forEach(tick => {
           if (tick.pos > -1) {
-            tick.button = this.renderer.button('How to fix',
-              null, this.xAxis[0].toPixels(tick.pos + 0.45, true),
+            tick.button = chart.renderer.button('How to fix',
+              null, chart.xAxis[0].toPixels(tick.pos + 0.45, true),
               () => alert(`click ${tick.pos}`),
               { 'stroke': 'blue', 'stroke-width': 3 }
             ).add();
@@ -43,16 +34,20 @@ Highcharts.chart('container', {
         });
       },
       render: function () {
-        this.customLabels[2].attr({ x: this.plotSizeY - this.xAxis[0].ticks[0].button.getBBox().x });
+        const chart = this,
+              firstButtonBBox = chart.xAxis[0].ticks[0].button.getBBox();
 
-        Object.values(this.xAxis[0].ticks).forEach(tick => {
+        chart.customLabels[2].attr({ x: chart.plotSizeY - firstButtonBBox.x });
+
+        Object.values(chart.xAxis[0].ticks).forEach(tick => {
           if (tick.pos > -1) {
-            tick.button.attr({ x: this.plotSizeY - tick.button.getBBox().x });
+            const buttonBBox = tick.button.getBBox();
+            tick.button.attr({ x: chart.plotSizeY - buttonBBox.x });
           }
 
-          tick.gridLine.pathArray[0][1] = this.spacingBox.x;
+          tick.gridLine.pathArray[0][1] = chart.spacingBox.x;
           tick.gridLine.attr({
-            'd': [...tick.gridLine.pathArray]
+            'd': tick.gridLine.pathArray
           });
         });
       }
@@ -73,9 +68,7 @@ Highcharts.chart('container', {
     },
     stackLabels: {
       enabled: true,
-      formatter: function () {
-        return `${this.total} K`;
-      }
+      format: '{total} K'
     },
     gridLineWidth: 0
   },
