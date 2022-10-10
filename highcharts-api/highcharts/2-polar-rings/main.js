@@ -1,76 +1,67 @@
-const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10));
+const data = Array.from({ length: 9 }, () => Math.round(Math.random() * 10)),
+      dataMax = Math.max(...data);
 
 Highcharts.chart('container', {
   chart: {
     polar: true,
+    type: 'column',
     events: {
-      load: function () {
-        const yAxis = this.yAxis[0];
+      render: function () {
+        const chart = this;
 
-        this.customCircle = this.renderer
-          .circle()
-          .attr({
+        if (!chart.customCircle) {
+          chart.customCircle = chart.renderer.circle().attr({
             stroke: 'blue',
             'stroke-width': 3,
             fill: 'none',
-          })
-          .add();
-        this.customCircle.value = Math.random();
+          }).add();
+  
+          chart.customCircle.value = Math.random();
+        }
 
-        yAxis.update({
-          max: yAxis.dataMax * 2,
-          tickInterval: (yAxis.dataMax * 2) / 5,
-          plotLines: [
-            {
-              dashStyle: 'dash',
-              width: 3,
-              color: '#2a0',
-              value: yAxis.dataMax * 1.5,
-            },
-          ],
+        chart.customCircle.attr({
+          cx: chart.yAxis[0].center[0] + chart.plotLeft,
+          cy: chart.yAxis[0].center[1] + chart.plotTop,
+          r: chart.yAxis[0].toPixels(chart.customCircle.value * chart.yAxis[0].dataMax * 2, true)
         });
-
-        yAxis.addPlotLine({
-          width: 3,
-          color: 'red',
-          value: yAxis.dataMax * Math.random() * 2,
-        });
-      },
-      redraw: function () {
-        const yAxis = this.yAxis[0];
-
-        this.customCircle.attr({
-          cx: this.plotSizeX / 2 + this.plotLeft,
-          cy: this.plotSizeY / 2 + this.plotTop,
-          r: yAxis.toPixels(this.customCircle.value * yAxis.dataMax * 2, true),
-        });
-      },
-    },
+      }
+    }
   },
   title: {
-    text: '',
+    text: ''
   },
   xAxis: {
-    categories: ['Jan', 'Feb', 'Mar'],
+    categories: ['Jan', 'Feb', 'Mar']
   },
   yAxis: {
-    title: '',
+    max: dataMax * 2,
+    tickInterval: (dataMax * 2) / 5,
+    plotLines: [
+      {
+        dashStyle: 'dash',
+        width: 3,
+        color: '#2a0',
+        value: dataMax * 1.5
+      },
+      {
+        width: 3,
+        color: 'red',
+        value: dataMax * Math.random() * 2
+      }
+    ],
   },
   series: [
     {
-      type: 'column',
       name: 'Tokyo',
-      data: data.slice(0, 3),
+      data: data.slice(0, 3)
     },
     {
-      type: 'column',
       name: 'New York',
-      data: data.slice(3, 6),
+      data: data.slice(3, 6)
     },
     {
-      type: 'column',
       name: 'London',
-      data: data.slice(6, 9),
+      data: data.slice(6, 9)
     },
   ],
   plotOptions: {
@@ -79,8 +70,8 @@ Highcharts.chart('container', {
         enabled: true,
         formatter: function () {
           return this.series.yAxis.dataMax == this.y ? 'max' : '';
-        },
-      },
-    },
-  },
+        }
+      }
+    }
+  }
 });
