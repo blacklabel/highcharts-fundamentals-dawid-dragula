@@ -6,9 +6,6 @@ Highcharts.chart('container', {
   chart: {
     type: 'column',
   },
-  boost: {
-    useGPUTranslations: true
-  },
   title: {
     text: ''
   },
@@ -24,7 +21,7 @@ Highcharts.chart('container', {
       text: ''
     }
   },
-  series: series,
+  series,
   plotOptions: {
     series: {
       borderWidth: 0,
