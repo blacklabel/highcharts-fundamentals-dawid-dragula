@@ -36,12 +36,12 @@ Highcharts.chart('container', {
                 'fill': 'red',
                 'font-weight': 'bold',
                 zIndex: 1
-              })
-              .add()
+              }).add()
           );
-
           this.xAxisPoints.push(
-
+            this.renderer
+              .circle(point.plotX + this.plotLeft, this.plotTop + this.plotHeight, 4)
+              .attr({ 'fill': 'red' }).add()
           );
         });
       }
