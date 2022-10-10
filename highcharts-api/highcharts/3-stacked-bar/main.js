@@ -12,12 +12,10 @@ Highcharts.chart('container', {
         const chart = this,
               customLabelsData = ['Issue', 'Record Count', 'Action'];
 
-        chart.customLabels = [];
-        customLabelsData.forEach(text => {
-          chart.customLabels.push(chart.renderer.text().attr({
+        chart.customLabels = customLabelsData.map(text => chart.renderer.text().attr({
             text, 'font-weight': 'bold', y: chart.spacing[0] - 16
-          }).add());
-        });
+          }).add()
+        );
 
         chart.customLabels[0].attr({ x: chart.plotLeft - 12, 'text-anchor': 'end' });
         chart.customLabels[1].attr({ x: chart.plotLeft });
