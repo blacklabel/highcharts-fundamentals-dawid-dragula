@@ -6,31 +6,34 @@ Highcharts.chart('container', {
     zoomType: 'xy',
     events: {
       load: function () {
-        this.customLabel = this.renderer.text().attr({ 'font-size': 13 }).add();
-        this.maxPointLabels = [];
-        this.xAxisPoints = [];
+        const chart = this;
+
+        chart.customLabel = chart.renderer.text().attr({ 'font-size': 13 }).add();
+        chart.maxPointLabels = [];
+        chart.xAxisPoints = [];
       },
       render: function () {
-        const visiblePoints = this.series[0].points.filter(i => i.isInside == true),
+        const chart = this,
+              visiblePoints = chart.series[0].points.filter(i => i.isInside == true),
               maxVisibleY = Math.max(...visiblePoints.map(i => i.y)),
               maxVisiblePoints = visiblePoints.filter(i => i.y == maxVisibleY);
 
-        this.maxPointLabels.forEach(i => i.destroy());
-        this.maxPointLabels.length = 0;
+        chart.maxPointLabels.forEach(i => i.destroy());
+        chart.maxPointLabels.length = 0;
 
-        this.xAxisPoints.forEach(i => i.destroy());
-        this.xAxisPoints.length = 0;
+        chart.xAxisPoints.forEach(i => i.destroy());
+        chart.xAxisPoints.length = 0;
 
-        this.customLabel.attr({
+        chart.customLabel.attr({
           text: 'Visible points: ' + visiblePoints.length,
-          x: this.plotLeft,
-          y: 55 + this.plotHeight + this.plotTop
+          x: chart.plotLeft,
+          y: 55 + chart.plotHeight + chart.plotTop
         });
 
         maxVisiblePoints.forEach(point => {
-          this.maxPointLabels.push(
-            this.renderer
-              .text(point.y, point.plotX + this.plotLeft, point.plotY + this.plotTop - 10)
+          chart.maxPointLabels.push(
+            chart.renderer
+              .text(point.y, point.plotX + chart.plotLeft, point.plotY + chart.plotTop - 10)
               .attr({
                 'text-anchor': 'middle',
                 'fill': 'red',
@@ -38,10 +41,10 @@ Highcharts.chart('container', {
                 zIndex: 1
               }).add()
           );
-          this.xAxisPoints.push(
-            this.renderer
-              .circle(point.plotX + this.plotLeft, this.plotTop + this.plotHeight, 4)
-              .attr({ 'fill': 'red' }).add()
+          chart.xAxisPoints.push(
+            chart.renderer
+              .circle(point.plotX + chart.plotLeft, chart.plotTop + chart.plotHeight, 4)
+              .attr({ 'fill': 'red', zIndex: 2 }).add()
           );
         });
       }
