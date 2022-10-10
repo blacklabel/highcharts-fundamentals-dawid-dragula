@@ -4,38 +4,10 @@ Highcharts.chart('container', {
   chart: {
     type: 'bar',
     events: {
-      load: function() {
-        this.yAxis.forEach(yAxis => {
-          Object.values(this.xAxis[0].ticks).forEach(tick => {
-            if (tick.pos > -1) {
-              if (tick.customBackground === undefined) {
-                tick.customBackground = [];
-              }
-              tick.customBackground[yAxis.userOptions.index] = this.renderer.rect().attr({
-                fill: '#A1B5C9',
-                zIndex: 1.1
-              }).add();
-            }
-          });
-        });
-      },
       render: function () {
         this.xAxis[0].labelGroup.translate(this.xAxis[0].labelGroup.getBBox().width, 0);
         this.yAxis.forEach(yAxis => {
           yAxis.axisTitle.translate(0, - yAxis.height - 30).attr({ 'font-size': 16 })
-          Object.values(this.xAxis[0].ticks).forEach(tick => {
-            if (tick.pos > -1) {
-              const height = yAxis.series[0].data[tick.pos].shapeArgs.width,
-                    tickY = tick.label.xy.y - height / 2 - tick.label.getBBox().height / 4,
-                    yAxisBBox = yAxis.gridGroup.getBBox();
-              tick.customBackground[yAxis.userOptions.index].attr({
-                x: yAxisBBox.x,
-                y: tickY,
-                width: yAxisBBox.width,
-                height: height
-              });
-            }
-          });
         });
       }
     },
@@ -45,7 +17,7 @@ Highcharts.chart('container', {
   },
   title: '',
   xAxis: {
-    categories: Array.from({ length: 4 }, (o, i) => 'Dep' + (i + 1)),
+    categories: Array.from({ length: 4 }, (_, i) => 'Dep' + (i + 1)),
     left: '50%',
     lineWidth: 0
   },
@@ -70,9 +42,19 @@ Highcharts.chart('container', {
       }
   }],
   series: [{
-      name: 'Manegrial Position',
-      data: data.slice(0, 4),
-      dataLabels: {
+      data: Array.from({ length: 4 }, () => 100),
+      color: '#A1B5C9',
+      enableMouseTracking: false,
+    }, {
+      data: Array.from({ length: 4 }, () => 100),
+      color: '#A1B5C9',
+      enableMouseTracking: false,
+      yAxis: 1
+    }, {
+        name: 'Manegrial Position',
+        data: data.slice(0, 4),
+        dataLabels: {
+        enabled: true,
         align: 'left'
       }
     }, {
@@ -80,20 +62,22 @@ Highcharts.chart('container', {
       data: data.slice(4, 8),
       yAxis: 1,
       dataLabels: {
+        enabled: true,
         align: 'right'
       }
-  }],
+    }],
   legend: {
     enabled: false
   },
   plotOptions: {
     series: {
       dataLabels: {
-        enabled: true,
         format: '{y} %',
         inside: true
       },
-      color: 'red'
+      borderWidth: 0,
+      color: 'red',
+      grouping: false
     }
   }
 });
