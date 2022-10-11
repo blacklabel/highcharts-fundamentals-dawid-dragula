@@ -19,11 +19,6 @@ Highcharts.chart('container', {
     yAxis: 1,
     baseSeries: 1,
     allowPointSelect: true,
-    states: {
-      inactive: {
-          enabled: false
-      }
-    },
     borderWidth: 0,
     point: {
       events: {
@@ -44,5 +39,14 @@ Highcharts.chart('container', {
   }, {
     type: 'scatter',
     data
-  }]
+  }],
+  plotOptions: {
+    series: {
+      states: {
+        inactive: {
+            enabled: false
+        }
+      }
+    }
+  }
 });
