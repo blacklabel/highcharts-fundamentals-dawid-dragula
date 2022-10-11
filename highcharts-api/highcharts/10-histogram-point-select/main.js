@@ -24,13 +24,20 @@ Highcharts.chart('container', {
           enabled: false
       }
     },
+    borderWidth: 0,
     point: {
       events: {
-        select: function () {
-          
-        },
-        unselect: function () {
+        click: function (event) {
+          const point = this,
+                scatterPoints = point.series.chart.series[1].data;
 
+          point.select();
+          if (point.selected) {
+            const ownedScatterPoints = scatterPoints.filter(i => point.x <= i.y && i.y <= point.x2);
+            ownedScatterPoints.forEach(i => i.select(true, true));
+          }
+
+          event.preventDefault();
         }
       }
     }
