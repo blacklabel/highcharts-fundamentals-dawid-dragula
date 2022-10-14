@@ -10,7 +10,6 @@ function toggleNode(node, expand = undefined) {
     link.toNode.graphic.css({ display });
     link.toNode.dataLabel.css({ display });
     if (!expand) {
-      link.toNode.collapsed = false;
       toggleNode(link.toNode, false);
     }
   });
