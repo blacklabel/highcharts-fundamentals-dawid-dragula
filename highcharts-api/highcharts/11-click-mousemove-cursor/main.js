@@ -3,15 +3,15 @@ const chart = Highcharts.chart('container', {
     type: 'line',
     events: {
       load: function () {
-        this.circleCursor = this.renderer.circle().attr({
-          'r': 6, 'fill': 'blue', 'zIndex': 3,
-          'stroke': 'black', 'stroke-width': 1
-        }).add();
+        this.circleCursor = this.renderer.circle();
+        this.circleCursor.attributes = {
+          r: 6, fill: 'blue', zIndex: 3,
+          stroke: 'black', 'stroke-width': 1
+        };
+        this.circleCursor.attr(this.circleCursor.attributes).add();
       },
       click: function (event) {
-        this.renderer.circle().attr({
-          'r': 6, 'fill': 'blue', 'zIndex': 3,
-          'stroke': 'black', 'stroke-width': 1,
+        this.renderer.circle().attr({ ...this.circleCursor.attributes,
           'x': event.chartX, 'y': event.chartY
         }).add();
       }
