@@ -65,6 +65,18 @@ Highcharts.chart('solar-system', {
   legend: { enabled: false },
   tooltip: { enabled: false },
   series: [{
+    name: 'Solar System',
+    animation: {
+      duration: 10
+    },
+    planeProjection: {
+      enabled: true,
+      byPoint: true
+    },
+    lineProjection: {
+      enabled: true,
+      colorByPoint: true
+    },
     data: [{
       name: 'sun',
       x: 5, y: 5, z: 5,
