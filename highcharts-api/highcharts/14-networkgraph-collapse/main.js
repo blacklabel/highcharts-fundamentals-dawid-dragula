@@ -1,25 +1,20 @@
-function nodeExpand(node) {
-  node.linksFrom.forEach(link => {
-    link.graphic.css({ display: 'block' });
-    link.toNode.graphic.css({ display: 'block' });
-    link.toNode.dataLabel.css({ display: 'block' });
-  });
-  node.collapsed = false;
-}
+function toggleNode(node, expand = undefined) {
+  if (expand === undefined) {
+    toggleNode(node, node.collapsed);
+    return;
+  }
 
-function nodeCollapse(node) {
+  const display = expand ? 'block' : 'none';
   node.linksFrom.forEach(link => {
-    link.graphic.css({ display: 'none' });
-    link.toNode.graphic.css({ display: 'none' });
-    link.toNode.dataLabel.css({ display: 'none' });
-    link.toNode.collapsed = true;
-    nodeCollapse(link.toNode);
+    link.graphic.css({ display });
+    link.toNode.graphic.css({ display });
+    link.toNode.dataLabel.css({ display });
+    if (!expand) {
+      link.toNode.collapsed = false;
+      toggleNode(link.toNode, false);
+    }
   });
-  node.collapsed = true;
-}
-
-function toggleNode(node) {
-  node.collapsed ? nodeExpand(node) : nodeCollapse(node);
+  node.collapsed = !expand;
 }
 
 Highcharts.chart('container', {
@@ -28,7 +23,7 @@ Highcharts.chart('container', {
     marginTop: 80,
     events: {
       load: function () {
-        nodeCollapse(this.series[0].nodes[0]);
+        toggleNode(this.series[0].nodes[0], false);
       }
     }
   },
