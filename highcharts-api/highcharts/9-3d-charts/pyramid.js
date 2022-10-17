@@ -19,5 +19,17 @@ Highcharts.chart('pyramid', {
     data: [40, 10, 4, 2, 2],
     height: '50%',
     center: ['50%', '25%']
-  }]
+  }],
+  plotOptions: {
+    series: {
+      states: {
+        inactive: {
+          enabled: false
+        },
+        hover: {
+          enabled: false
+        }
+      }
+    }
+  }
 });
