@@ -1,0 +1,7 @@
+.toggle-live-data .highcharts-menu-item-btn {
+  background-image: url(https://www.svgrepo.com/show/309737/live.svg) !important;
+}
+
+.change-data-grouping .highcharts-menu-item-btn {
+  background-image: url(https://www.svgrepo.com/show/340100/data-1.svg) !important;
+}
