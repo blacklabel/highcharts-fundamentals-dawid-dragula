@@ -1,9 +1,7 @@
-function toggleNode(node, expand = undefined) {
+function toggleNode(node, expand) {
   if (expand === undefined) {
-    toggleNode(node, node.collapsed);
-    return;
+    expand = node.collapsed;
   }
-
   const display = expand ? 'block' : 'none';
   node.linksFrom.forEach(link => {
     link.graphic.css({ display });
