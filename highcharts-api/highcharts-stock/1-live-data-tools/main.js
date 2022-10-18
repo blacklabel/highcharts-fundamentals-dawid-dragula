@@ -22,21 +22,102 @@ const defaultButtons = ['indicators', 'separator', 'simpleShapes', 'lines', 'cro
           bindings: {
             changeDataGrouping: {
               className: 'change-data-grouping',
-              init: function() {
-                console.log(this);
-              }
+              init: toggleDataGrouping
             },
             toggleLiveData: {
               className: 'toggle-live-data',
-              init: function() {
-                console.log('toggle');
-              }
+              init: toggleLiveData
             }
           }
         }
       };
 
+function renderCustomLabels(chart, labels) {
+  if (!labels) {
+    return;
+  }
+
+  const renderer = chart.renderer,
+        rangeSelector = chart.rangeSelector,
+        buttonGroupBBox = rangeSelector.buttonGroup.getBBox();
+
+  if (typeof rangeSelector.customLabels !== 'object') {
+    rangeSelector.customLabels = {};
+  }
+
+  const customLabels = rangeSelector.customLabels,
+        y = 26,
+        space = 26;
+
+  let xCursor = buttonGroupBBox.x + buttonGroupBBox.width + space;
+
+  function renderLabel(id, text) {
+    if (labels.includes(id)) {
+      if (!customLabels[id]) {
+        customLabels[id] = renderer.text().add(rangeSelector.group);
+      }
+  
+      customLabels[id].attr({
+        x: xCursor, y,
+        text, 'font-size': 15
+      });
+  
+      const bBox = customLabels[id].getBBox();
+      xCursor += bBox.width + space;
+    } else if (customLabels[id]) {
+      customLabels[id].destroy();
+      customLabels[id] = undefined;
+    }
+  }
+
+  renderLabel('dataGrouping', `Data Grouping Anchor: ${chart.series[0].dataGroupingAnchor},`);
+  renderLabel('liveMode', 'Live Mode: Off');
+}
+
+function toggleDataGrouping() {
+  const chart = this.chart,
+        current = chart.series[0].dataGroupingAnchor,
+        currentId = dataGroupingAnchors.findIndex(i => i === current),
+        toggleTo = dataGroupingAnchors[(currentId + 1) % 3]
+  
+  chart.series[0].update({
+    dataGrouping: {
+      dataGrouping: {
+        anchor: toggleTo,
+      }
+    }
+  })
+  
+  chart.series[0].dataGroupingAnchor = toggleTo;
+  chart.rangeSelector.customLabels.dataGrouping.attr({ text: `Data Grouping Anchor: ${toggleTo},` });
+}
+
+function toggleLiveData() {
+  const chart = this.chart;
+
+  if (!chart.liveDataMode) {
+    chart.liveDataMode = true;
+    chart.liveDataInterval = setInterval(() => {
+      const now = new Date();
+      chart.series[0].addPoint([now.getTime(), Math.round(Math.random() * 10000) / 100]);
+    }, 1000);
+    chart.rangeSelector.customLabels.liveMode.attr({ text: `Live Mode: On` });
+    return;
+  }
+
+  chart.liveDataMode = false;
+  clearInterval(chart.liveDataInterval);
+  chart.rangeSelector.customLabels.liveMode.attr({ text: `Live Mode: Off` });
+}
+
 const chartA = Highcharts.stockChart('container-a', {
+  chart: {
+    events: {
+      load: function () {
+        renderCustomLabels(this, ['liveMode']);
+      }
+    }
+  },
   title: {
     text: 'Chart A'
   },
@@ -87,9 +168,14 @@ const chartA = Highcharts.stockChart('container-a', {
 const chartB = Highcharts.stockChart('container-b', {
   chart: {
     events: {
-      render: function () {
-        console.log(this);
-        //this.groupDataLabel = this.renderer.text()
+      load: function () {
+        const chart = this,
+              series = chart.series[0],
+              customLabels = chart.rangeSelector.customLabels;
+
+        series.dataGroupingAnchor = dataGroupingAnchors[1];
+        
+        renderCustomLabels(this, ['dataGrouping', 'liveMode']);
       }
     }
   },
@@ -97,7 +183,11 @@ const chartB = Highcharts.stockChart('container-b', {
     text: 'Chart B'
   },
   series: [{
-    data: genRandomData()
+    data: genRandomData(),
+    dataGrouping: {
+      anchor: 'middle',
+      forced: true
+    }
   }],
   stockTools: {
     gui: {
