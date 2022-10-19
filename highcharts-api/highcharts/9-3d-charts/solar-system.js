@@ -44,7 +44,6 @@ Highcharts.chart('solar-system', {
     events: {
       load: function () {
         let tick = 0;
-        console.log()
         setInterval(() => {
           frame(this, tick);
           tick++;
@@ -104,5 +103,3 @@ Highcharts.chart('solar-system', {
     }
   }
 });
-
-console.log(Highcharts);
