@@ -26,5 +26,4 @@ Highcharts.ganttChart('container', {
             end: 1561680000000
         }]
     }]
-
 });
