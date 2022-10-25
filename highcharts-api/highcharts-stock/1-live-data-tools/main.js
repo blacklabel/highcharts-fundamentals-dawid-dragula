@@ -74,7 +74,7 @@ function renderCustomLabels(chart, labels) {
   renderLabel('liveMode', 'Live Mode: Off');
 }
 
-function toggleDataGrouping() {
+function toggleDataGrouping(button) {
   const chart = this.chart,
         current = chart.series[0].dataGroupingAnchor,
         currentId = dataGroupingAnchors.findIndex(i => i === current),
@@ -90,9 +90,13 @@ function toggleDataGrouping() {
   
   chart.series[0].dataGroupingAnchor = toggleTo;
   chart.rangeSelector.customLabels.dataGrouping.attr({ text: `Data Grouping Anchor: ${toggleTo},` });
+
+  Highcharts.fireEvent(this, 'deselectButton', {
+    button
+  });
 }
 
-function toggleLiveData() {
+function toggleLiveData(button) {
   const chart = this.chart;
 
   if (!chart.liveDataMode) {
@@ -108,6 +112,10 @@ function toggleLiveData() {
   chart.liveDataMode = false;
   clearInterval(chart.liveDataInterval);
   chart.rangeSelector.customLabels.liveMode.attr({ text: `Live Mode: Off` });
+
+  Highcharts.fireEvent(this, 'deselectButton', {
+    button
+  });
 }
 
 const chartA = Highcharts.stockChart('container-a', {
