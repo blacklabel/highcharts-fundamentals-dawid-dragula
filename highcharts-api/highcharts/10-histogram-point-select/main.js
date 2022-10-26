@@ -8,10 +8,16 @@ Highcharts.chart('container', {
     opposite: true
   }],
   yAxis: [{
-    title: { text: 'Values' }
+    title: { text: 'Values' },
+    min: 0,
+    max: 12,
+    tickAmount: 5
   }, {
     title: { text: 'Histogram' },
-    opposite: true
+    opposite: true,
+    min: 0,
+    max: 8,
+    tickAmount: 5
   }],
   series: [{
     type: 'histogram',
@@ -38,7 +44,7 @@ Highcharts.chart('container', {
     }
   }, {
     type: 'scatter',
-    data
+    data: data
   }],
   plotOptions: {
     series: {
