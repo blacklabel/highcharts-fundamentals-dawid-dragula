@@ -61,6 +61,14 @@ Highcharts.chart('container', {
             oppositePoint.setVisible(!point.visible);
           }
         }
+      },
+      states: {
+        hover: {
+          enabled: false
+        },
+        inactive: {
+          enabled: false
+        }
       }
     }
   }
