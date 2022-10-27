@@ -43,10 +43,12 @@ Highcharts.chart('container', {
                   chart = point.series.chart,
                   oppositePoint = findOppositePoint(point);
 
+
             if (!chart.tooltip2) {
               chart.tooltip2 = new Highcharts.Tooltip(chart, chart.tooltip.options);
             }
 
+            oppositePoint.setState('hover');
             chart.tooltip2.refresh(oppositePoint);
           },
           mouseOut: function () {
@@ -62,7 +64,7 @@ Highcharts.chart('container', {
       },
       states: {
         hover: {
-          enabled: false
+          brightness: 0
         },
         inactive: {
           enabled: false
