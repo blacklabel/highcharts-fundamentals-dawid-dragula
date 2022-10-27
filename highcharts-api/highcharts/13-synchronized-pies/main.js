@@ -12,6 +12,10 @@ const data = [{
   name: 'Corporate Services & others', y: 1.2
 }];
 
+function findOppositeSeries(series) {
+  return series.chart.series[Number(!series.index)];
+}
+
 Highcharts.chart('container', {
   chart: {
     type: 'pie'
@@ -37,7 +41,7 @@ Highcharts.chart('container', {
           mouseOver: function () {
             const point = this,
                   chart = point.series.chart,
-                  oppositeSeries = chart.series[Number(!point.series.index)];
+                  oppositeSeries = findOppositeSeries(point.series);
 
             oppositeSeries.points[point.index].setState('hover');
 
@@ -51,8 +55,8 @@ Highcharts.chart('container', {
             this.series.chart.tooltip2.hide();
           },
           legendItemClick: function () {
-            const point = this
-                  oppositeSeries = point.series.chart.series[Number(!point.series.index)];
+            const point = this,
+                  oppositeSeries = findOppositeSeries(point.series);
             
             oppositeSeries.points[point.index].setVisible(!point.visible);
           }
