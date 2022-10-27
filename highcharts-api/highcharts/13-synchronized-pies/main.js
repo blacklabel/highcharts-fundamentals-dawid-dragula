@@ -12,8 +12,8 @@ const data = [{
   name: 'Corporate Services & others', y: 1.2
 }];
 
-function findOppositeSeries(series) {
-  return series.chart.series[Number(!series.index)];
+function findOppositePoint(point) {
+  return point.series.chart.series[Number(!point.series.index)].points[point.index];
 }
 
 Highcharts.chart('container', {
@@ -41,24 +41,24 @@ Highcharts.chart('container', {
           mouseOver: function () {
             const point = this,
                   chart = point.series.chart,
-                  oppositeSeries = findOppositeSeries(point.series);
+                  oppositePoint = findOppositePoint(point);
 
-            oppositeSeries.points[point.index].setState('hover');
+            oppositePoint.setState('hover');
 
             if (!chart.tooltip2) {
               chart.tooltip2 = new Highcharts.Tooltip(chart, chart.tooltip.options);
             }
 
-            chart.tooltip2.refresh(oppositeSeries.data[point.index]);
+            chart.tooltip2.refresh(oppositePoint);
           },
           mouseOut: function () {
             this.series.chart.tooltip2.hide();
           },
           legendItemClick: function () {
             const point = this,
-                  oppositeSeries = findOppositeSeries(point.series);
+                  oppositePoint = findOppositePoint(point);
             
-            oppositeSeries.points[point.index].setVisible(!point.visible);
+            oppositePoint.setVisible(!point.visible);
           }
         }
       }
