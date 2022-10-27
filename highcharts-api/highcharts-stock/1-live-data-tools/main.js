@@ -1,6 +1,6 @@
 function genRandomData() {
-  const unit = 86400000;
-  const startDate = 1602595800000;
+  const unit = 86400000,
+        startDate = 1602595800000;
   return Array.from({ length: 500 }, (_, i) => [startDate + i * unit, Math.round(Math.random() * 10000) / 100]);
 }
 
@@ -8,11 +8,19 @@ const defaultButtons = ['indicators', 'separator', 'simpleShapes', 'lines', 'cro
                         'measure', 'advanced', 'toggleAnnotations', 'separator', 'verticalLabels',
                         'flags', 'separator', 'zoomChange', 'fullScreen', 'typeChange', 'separator',
                         'currentPriceIndicator', 'saveChart'],
-      dataGroupingAnchors = ['start', 'middle', 'end'],
       customButtons = {
         definitions: {
           changeDataGrouping: {
-            className: 'change-data-grouping'
+            items: ['groupingStart', 'groupingMiddle', 'groupingEnd'],
+            groupingStart: {
+              className: 'd-g-start'
+            },
+            groupingMiddle: {
+              className: 'd-g-middle'
+            },
+            groupingEnd: {
+              className: 'd-g-end'
+            }
           },
           toggleLiveData: {
             className: 'toggle-live-data'
@@ -20,13 +28,27 @@ const defaultButtons = ['indicators', 'separator', 'simpleShapes', 'lines', 'cro
         },
         navigation: {
           bindings: {
-            changeDataGrouping: {
-              className: 'change-data-grouping',
-              init: toggleDataGrouping
-            },
             toggleLiveData: {
               className: 'toggle-live-data',
               init: toggleLiveData
+            },
+            groupingStart: {
+              className: 'd-g-start',
+              init(button) {
+                toggleDataGrouping(button, this, 'start');
+              }
+            },
+            groupingMiddle: {
+              className: 'd-g-middle',
+              init(button) {
+                toggleDataGrouping(button, this, 'middle');
+              }
+            },
+            groupingEnd: {
+              className: 'd-g-end',
+              init(button) {
+                toggleDataGrouping(button, this, 'end');
+              }
             }
           }
         }
@@ -70,15 +92,14 @@ function renderCustomLabels(chart, labels) {
     }
   }
 
-  renderLabel('dataGrouping', `Data Grouping Anchor: ${chart.series[0].dataGroupingAnchor},`);
+  renderLabel('dataGrouping', `Data Grouping Anchor: middle,`);
   renderLabel('liveMode', 'Live Mode: Off');
 }
 
-function toggleDataGrouping(button) {
-  const chart = this.chart,
-        current = chart.series[0].dataGroupingAnchor,
-        currentId = dataGroupingAnchors.findIndex(i => i === current),
-        toggleTo = dataGroupingAnchors[(currentId + 1) % 3]
+function toggleDataGrouping(button, object, toggleTo) {
+  const chart = object.chart;
+
+  Highcharts.fireEvent(this, 'deselectButton', { button });
   
   chart.series[0].update({
     dataGrouping: {
@@ -88,16 +109,13 @@ function toggleDataGrouping(button) {
     }
   })
   
-  chart.series[0].dataGroupingAnchor = toggleTo;
   chart.rangeSelector.customLabels.dataGrouping.attr({ text: `Data Grouping Anchor: ${toggleTo},` });
-
-  Highcharts.fireEvent(this, 'deselectButton', {
-    button
-  });
 }
 
 function toggleLiveData(button) {
   const chart = this.chart;
+
+  Highcharts.fireEvent(this, 'deselectButton', { button });
 
   if (!chart.liveDataMode) {
     chart.liveDataMode = true;
@@ -112,10 +130,6 @@ function toggleLiveData(button) {
   chart.liveDataMode = false;
   clearInterval(chart.liveDataInterval);
   chart.rangeSelector.customLabels.liveMode.attr({ text: `Live Mode: Off` });
-
-  Highcharts.fireEvent(this, 'deselectButton', {
-    button
-  });
 }
 
 const chartA = Highcharts.stockChart('container-a', {
@@ -177,11 +191,7 @@ const chartB = Highcharts.stockChart('container-b', {
   chart: {
     events: {
       load: function () {
-        const chart = this,
-              series = chart.series[0],
-              customLabels = chart.rangeSelector.customLabels;
-
-        series.dataGroupingAnchor = dataGroupingAnchors[1];
+        const chart = this;
         
         renderCustomLabels(this, ['dataGrouping', 'liveMode']);
       }

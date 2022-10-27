@@ -2,6 +2,14 @@
   background-image: url(https://www.svgrepo.com/show/309737/live.svg) !important;
 }
 
-.change-data-grouping .highcharts-menu-item-btn {
-  background-image: url(https://www.svgrepo.com/show/340100/data-1.svg) !important;
+.d-g-start .highcharts-menu-item-btn {
+  background-image: url(https://www.svgrepo.com/show/353378/align-left.svg) !important;
+}
+
+.d-g-middle .highcharts-menu-item-btn {
+  background-image: url(https://www.svgrepo.com/show/379178/horizontal-align-center.svg) !important;
+}
+
+.d-g-end .highcharts-menu-item-btn {
+  background-image: url(https://www.svgrepo.com/show/353379/align-right.svg) !important;
 }
