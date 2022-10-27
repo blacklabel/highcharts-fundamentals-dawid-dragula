@@ -43,8 +43,6 @@ Highcharts.chart('container', {
                   chart = point.series.chart,
                   oppositePoint = findOppositePoint(point);
 
-            oppositePoint.setState('hover');
-
             if (!chart.tooltip2) {
               chart.tooltip2 = new Highcharts.Tooltip(chart, chart.tooltip.options);
             }
