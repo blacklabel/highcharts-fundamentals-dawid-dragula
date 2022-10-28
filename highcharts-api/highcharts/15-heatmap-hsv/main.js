@@ -1,5 +1,5 @@
 let val = 0.8;
-let param = false;
+let vParam = false;
 
 const valueLabel = document.getElementById('parameter-value'),
       slider = document.getElementById('slider'),
@@ -33,7 +33,7 @@ function genSeries(width, height) {
     for (let j = 0; j < width; j++) {
       const H = j / (width - 1),
             S = i / (height - 1),
-            rgb = `rgb(${hsvToRgb(H, param ? val : S, param ? S : val).join(', ')})`;
+            rgb = `rgb(${hsvToRgb(H, vParam ? val : S, vParam ? S : val).join(', ')})`;
       data.push({
         x: H * 360, y: S,
         value: 1,
@@ -95,11 +95,11 @@ slider.addEventListener('change', () => chartUpdate());
   
 
 sRadio.addEventListener('change', () => {
-  param = false;
+  vParam = false;
   chartUpdate();
 });
 
 vRadio.addEventListener('change', () => {
-  param = true;
+  vParam = true;
   chartUpdate();
 });
