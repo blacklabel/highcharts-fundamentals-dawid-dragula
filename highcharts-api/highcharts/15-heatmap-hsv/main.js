@@ -7,14 +7,14 @@ const valueLabel = document.getElementById('parameter-value'),
       vRadio = document.getElementById('v-radio');
 
 function hsvToRgb(h, s, v) {
-  var r, g, b;
+  const i = Math.floor(h * 6),
+        f = h * 6 - i,
+        p = v * (1 - s),
+        q = v * (1 - f * s),
+        t = v * (1 - (1 - f) * s);
 
-  var i = Math.floor(h * 6);
-  var f = h * 6 - i;
-  var p = v * (1 - s);
-  var q = v * (1 - f * s);
-  var t = v * (1 - (1 - f) * s);
-
+  let r, g, b;
+  
   switch (i % 6) {
     case 0: r = v, g = t, b = p; break;
     case 1: r = q, g = v, b = p; break;
@@ -24,7 +24,7 @@ function hsvToRgb(h, s, v) {
     case 5: r = v, g = p, b = q; break;
   }
 
-  return [ r * 255, g * 255, b * 255 ];
+  return [ Math.round(r * 255),Math.round(g * 255), Math.round(b * 255) ];
 }
 
 function genSeries(width, height) {
@@ -34,7 +34,6 @@ function genSeries(width, height) {
       const H = j / (width - 1),
             S = i / (height - 1),
             rgb = `rgb(${hsvToRgb(H, param ? val : S, param ? S : val).join(', ')})`;
-
       data.push({
         x: H * 360, y: S,
         value: 1,
