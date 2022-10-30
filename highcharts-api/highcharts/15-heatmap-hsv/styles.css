@@ -1,0 +1,13 @@
+#controller {
+  padding: 5px;
+  border: 1px solid black;
+  width: 690px;
+}
+
+#parameter-value {
+  display: block;
+}
+
+#slider {
+  width: 680px
+}

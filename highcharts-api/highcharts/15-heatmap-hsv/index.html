@@ -7,11 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="https://code.highcharts.com/highcharts.js"></script>
-
+  <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <div id="container"></div>
+  <div id="controller">
+    <span>Select which parameter should be controlled by the slider</span>
+    <span id="parameter-value">0.8</span>
+    <input type="range" min="1" max="100" value="80" id="slider">
+    <input type="radio" id="s-radio" name="param-radio" checked>
+    <label for="s-radio">S</label>
+    <input type="radio" id="v-radio" name="param-radio">
+    <label for="v-radio">V</label>
+  </div>
 </body>
 
 <script src="main.js"></script>
