@@ -1,16 +1,14 @@
 function centerZoom(axis, strength) {
-  if (axis.center === undefined) {
-    axis.zoomOffset = (axis.max - axis.min) / 2;
-    axis.center = axis.min + axis.zoomOffset;
+  let zoomOffset = (axis.max - axis.min) / 2;
+  let center = axis.min + zoomOffset;
+
+  zoomOffset += strength * axis.toValue(1);
+
+  if (zoomOffset < 0) {
+    zoomOffset = 0;
   }
 
-  axis.zoomOffset += strength * axis.toValue(1);
-
-  if (axis.zoomOffset < 0) {
-    axis.zoomOffset = 0;
-  }
-
-  axis.setExtremes(axis.center - axis.zoomOffset, axis.center + axis.zoomOffset, false);
+  axis.setExtremes(center - zoomOffset, center + zoomOffset, false);
   axis.chart.redraw(false);
 }
 
@@ -46,13 +44,13 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-c.json', data => 
   Highcharts.stockChart('container', {
     chart: {
       events: {
-        load: async function () {
+        load: function () {
           const chart = this;
                 yAxes = chart.yAxis.filter(p => p.userOptions.id !== 'navigator-y-axis'),
                 xAxis = chart.xAxis[0];
 
           yAxes.forEach(yAxis => {
-            yAxis.axisRect = chart.renderer.rect().attr({ width: 30, height: yAxis.height, fill: 'transparent'}).css({ cursor: 'n-resize' }).add(yAxis.labelGroup);
+            yAxis.axisRect = chart.renderer.rect().attr({ width: 30, height: yAxis.height, fill: 'transparent'}).css({ cursor: 'n-resize' }).add();
   
             yAxis.axisRect.on('mousedown', () => { yAxis.drag = true; });
             yAxis.axisRect.on('mouseover', () =>  { xAxis.scaleMode = 'max'; });
@@ -64,21 +62,23 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-c.json', data => 
           document.addEventListener('wheel', event => onWheel(xAxis, event));
 
 
-          xAxis.axisRect = chart.renderer.rect().attr({ fill: 'transparent' }).css({ cursor: 'w-resize' }).add();
+          xAxis.axisRect = chart.renderer.rect().attr({ fill: 'transparent' }).css({ cursor: 'w-resize' }).add(xAxis.labelGroup);
 
-          Highcharts.addEvent(xAxis.labelGroup.element, 'mouseover', () => { xAxis.scaleMode = 'center' });
-          Highcharts.addEvent(xAxis.labelGroup.element, 'mouseout', () => { xAxis.scaleMode = 'center' });
+          yAxes.forEach(yAxis => {
+            Highcharts.addEvent(yAxis.labelGroup.element, 'mouseover', () => { xAxis.scaleMode = 'center' });
+            Highcharts.addEvent(yAxis.labelGroup.element, 'mouseout', () => { xAxis.scaleMode = 'center' });
+          });
           xAxis.axisRect.on('mouseover', () => { xAxis.scaleMode = 'max' });
           xAxis.axisRect.on('mouseout', () => { xAxis.scaleMode = null });
         },
-        render: async function () {
+        render: function () {
           const chart = this,
                 yAxes = chart.yAxis.filter(p => p.userOptions.id !== 'navigator-y-axis');
           
           yAxes.forEach(yAxis => {
-            yAxis.axisRect.attr({ x: yAxis.width - 10, y: yAxis.top }).toFront();
+            yAxis.axisRect.attr({ x: yAxis.width - 10, y: yAxis.top });
           });
-          xAxis.axisRect.attr(xAxis.labelGroup.getBBox());
+          xAxis.axisRect.attr(xAxis.labelGroup.getBBox()).toFront();
         }
       }
     },
