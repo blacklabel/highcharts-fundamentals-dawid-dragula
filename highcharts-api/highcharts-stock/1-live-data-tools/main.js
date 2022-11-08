@@ -96,18 +96,16 @@ function renderCustomLabels(chart, labels) {
   renderLabel('liveMode', 'Live Mode: Off');
 }
 
-function toggleDataGrouping(button, object, toggleTo) {
-  const chart = object.chart;
+function toggleDataGrouping(button, selection, toggleTo) {
+  const chart = selection.chart;
 
-  Highcharts.fireEvent(this, 'deselectButton', { button });
+  Highcharts.fireEvent(selection, 'deselectButton', { button });
   
   chart.series[0].update({
     dataGrouping: {
-      dataGrouping: {
-        anchor: toggleTo,
-      }
+      anchor: toggleTo,
     }
-  })
+  });
   
   chart.rangeSelector.customLabels.dataGrouping.attr({ text: `Data Grouping Anchor: ${toggleTo},` });
 }
