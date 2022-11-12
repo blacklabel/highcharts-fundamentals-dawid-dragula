@@ -27,11 +27,12 @@ function onMouseUp(yAxes) {
 function onWheel(xAxis, event) {
   if (xAxis.scaleMode === 'max') {
     let zoomOffset = event.deltaY * xAxis.toValue(1) * 0.000001;
-    const firstX = Math.min(...xAxis.series.map(s => s.data[0].x));
 
-    if (xAxis.min + zoomOffset < firstX) {
-      zoomOffset = firstX - xAxis.min;
+    if (xAxis.min + zoomOffset < xAxis.dataMin) {
+      zoomOffset = xAxis.dataMin - xAxis.min;
     }
+
+    console.log(xAxis.dataMin, xAxis);
 
     xAxis.setExtremes(xAxis.min + zoomOffset, xAxis.max, false);
     xAxis.chart.redraw(false);
@@ -66,8 +67,9 @@ Highcharts.getJSON('https://demo-live-data.highcharts.com/aapl-c.json', data => 
 
           yAxes.forEach(yAxis => {
             Highcharts.addEvent(yAxis.labelGroup.element, 'mouseover', () => { xAxis.scaleMode = 'center' });
-            Highcharts.addEvent(yAxis.labelGroup.element, 'mouseout', () => { xAxis.scaleMode = 'center' });
+            Highcharts.addEvent(yAxis.labelGroup.element, 'mouseout', () => { xAxis.scaleMode = null });
           });
+          
           xAxis.axisRect.on('mouseover', () => { xAxis.scaleMode = 'max' });
           xAxis.axisRect.on('mouseout', () => { xAxis.scaleMode = null });
         },
